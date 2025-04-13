@@ -1,42 +1,23 @@
 package model;
 
-public class ContactUsMessage {
-    private int id;
-    private String name;
-    private String message;
-    private String timestamp;
+import java.sql.Timestamp;
 
-    public ContactUsMessage() {}
-    public ContactUsMessage(int id, String name, String message, String timestamp) {
-        this.id = id;
-        this.name = name;
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+public class ContactUsMessage {
+    private int messageId;
+    private String name;
+    private String email;
+    private String message;
+    private Timestamp submittedAt;
 
     // Getters and Setters
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getMessage() {
-        return message;
-    }
-    public void setMessage(String message) {
-        this.message = message;
-    }
-    public String getTimestamp() {
-        return timestamp;
-    }
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+    public int getMessageId() { return messageId; }
+    public void setMessageId(int messageId) { this.messageId = messageId; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+    public Timestamp getSubmittedAt() { return submittedAt; }
+    public void setSubmittedAt(Timestamp submittedAt) { this.submittedAt = submittedAt; }
 }

@@ -1,42 +1,48 @@
 package model;
 
+import java.sql.Date;
+import java.sql.Time;
+
 public class Event {
-    private int id;
-    private String name;
-    private String date;
+    private int eventId;
+    private String title;
+    private String description;
+    private Date date;
+    private Time time;
     private String location;
-    private int capacity;
+    private double price;
+    private double rating;
+    private int createdBy;
 
-    public Event() {}
-    public Event(int id, String name, String date, String location, int capacity) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.location = location;
-        this.capacity = capacity;
+    public int getEventId() {
+        return eventId;
     }
-
-    // Getters and Setters
-    public int getId() {
-        return id;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
-    public void setId(int id) {
-
-        this.id = id;
+    public String getTitle() {
+        return title;
     }
-    public String getName() {
-
-        return name;
+    public void setTitle(String title) {
+        this.title = title;
     }
-    public void setName(String name) {
-        this.name = name;
+    public String getDescription() {
+        return description;
     }
-    public String getDate() {
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public Date getDate() {
         return date;
     }
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+    public Time getTime() {
+        return time;
+    }
+    public void setTime(Time time) {
+        this.time = time;
     }
     public String getLocation() {
         return location;
@@ -44,10 +50,22 @@ public class Event {
     public void setLocation(String location) {
         this.location = location;
     }
-    public int getCapacity() {
-        return capacity;
+    public double getPrice() {
+        return price;
     }
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+    public double getRating() {
+        return rating;
+    }
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+    public int getCreatedBy() {
+        return createdBy;
+    }
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
     }
 }

@@ -1,47 +1,50 @@
 CREATE DATABASE events_db;
 USE events_db;
-
 CREATE TABLE Users (
-                       id INT PRIMARY KEY AUTO_INCREMENT,
-                       email VARCHAR(255) UNIQUE,
-                       password VARCHAR(255),
-                       role ENUM('Admin', 'Customer'),
-                       image VARCHAR(255)
+                       userId INT AUTO_INCREMENT PRIMARY KEY,
+                       email VARCHAR(100) UNIQUE NOT NULL,
+                       password VARCHAR(100) NOT NULL,
+                       role ENUM('Customer', 'Admin') NOT NULL,
+                       fullName VARCHAR(100),
+                       profileImage BLOB
 );
 
 CREATE TABLE Events (
-                        id INT PRIMARY KEY AUTO_INCREMENT,
-                        name VARCHAR(255),
-                        date DATE,
-
+                        eventId INT AUTO_INCREMENT PRIMARY KEY,
+                        title VARCHAR(100) NOT NULL,
+                        description TEXT,
+                        date DATE NOT NULL,
+                        location VARCHAR(100),
+                        category VARCHAR(50),
+                        organizerId INT,
+                        FOREIGN KEY (organizerId) REFERENCES Users(userId)
+);
 
 CREATE TABLE Bookings (
-                          id INT PRIMARY KEY AUTO_INCREMENT,
-                          customer_id INT,
-                          event_id INT,
-                          booking_date DATE,
-                          FOREIGN KEY (customer_id) REFERENCES Users(id),
-                          FOREIGN KEY (event_id) REFERENCES Events(id)
+                          bookingId INT AUTO_INCREMENT PRIMARY KEY,
+                          userId INT,
+                          eventId INT,
+                          status ENUM('Pending', 'Approved', 'Cancelled') DEFAULT 'Pending',
+                          bookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          FOREIGN KEY (userId) REFERENCES Users(userId),
+                          FOREIGN KEY (eventId) REFERENCES Events(eventId)
 );
 
-CREATE TABLE EventLists (
-                            id INT PRIMARY KEY AUTO_INCREMENT,
-                            event_id INT,
-                            list_name VARCHAR(255),
-                            FOREIGN KEY (event_id) REFERENCES Events(id)
-);
-
-CREATE TABLE EventBookHistory (
-                                  id INT PRIMARY KEY AUTO_INCREMENT,
-                                  booking_id INT,
-                                  action ENUM('Booked', 'Canceled'),
-                                  timestamp DATETIME,
-                                  FOREIGN KEY (booking_id) REFERENCES Bookings(id)
+CREATE TABLE Feedback (
+                          feedbackId INT AUTO_INCREMENT PRIMARY KEY,
+                          userId INT,
+                          eventId INT,
+                          rating INT CHECK (rating >= 1 AND rating <= 5),
+                          comment TEXT,
+                          feedbackDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          FOREIGN KEY (userId) REFERENCES Users(userId),
+                          FOREIGN KEY (eventId) REFERENCES Events(eventId)
 );
 
 CREATE TABLE ContactUsMessages (
-                                   id INT PRIMARY KEY AUTO_INCREMENT,
-                                   name VARCHAR(255),
+                                   messageId INT AUTO_INCREMENT PRIMARY KEY,
+                                   name VARCHAR(100),
+                                   email VARCHAR(100),
                                    message TEXT,
-                                   timestamp DATETIME
+                                   submittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
