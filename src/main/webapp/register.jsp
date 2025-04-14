@@ -68,25 +68,7 @@
 
     <div class="auth-image">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%">
-            <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#2196F3;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grad1)"/>
-            <g fill="rgba(255,255,255,0.2)">
-                <circle cx="4" cy="4" r="2" />
-                <circle cx="12" cy="4" r="2" />
-                <circle cx="20" cy="4" r="2" />
-                <circle cx="4" cy="12" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="20" cy="12" r="2" />
-                <circle cx="4" cy="20" r="2" />
-                <circle cx="12" cy="20" r="2" />
-                <circle cx="20" cy="20" r="2" />
-            </g>
-            <path d="M12 2a10 10 0 0 0-10 10c0 1.74.43 3.37 1.17 4.79l1.42-1.43A7.9 7.9 0 0 1 4 12a8 8 0 0 1 16 0 7.9 7.9 0 0 1-.59 3.36l1.42 1.43A9.98 9.98 0 0 0 22 12c0-5.52-4.48-10-10-10zm0 5a5 5 0 0 0-5 5c0 1.11.37 2.12 1 2.95V19h8v-4.05A5 5 0 0 0 17 12a5 5 0 0 0-5-5z" fill="rgba(255,255,255,0.9)"/>
+
         </svg>
         <div class="auth-image-overlay">
             <h2>Join Us Today!</h2>

@@ -68,25 +68,7 @@
 
     <div class="auth-image">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%">
-            <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#5D50C6;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grad1)"/>
-            <g fill="rgba(255,255,255,0.2)">
-                <circle cx="4" cy="4" r="2" />
-                <circle cx="12" cy="4" r="2" />
-                <circle cx="20" cy="4" r="2" />
-                <circle cx="4" cy="12" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="20" cy="12" r="2" />
-                <circle cx="4" cy="20" r="2" />
-                <circle cx="12" cy="20" r="2" />
-                <circle cx="20" cy="20" r="2" />
-            </g>
-            <path d="M19 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16h-4V5h4v14zM7 3H3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM7 19H3V5h4v14z" fill="rgba(255,255,255,0.9)"/>
+
         </svg>
         <div class="auth-image-overlay">
             <h2>Welcome Back!</h2>
