@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/event_db";
+public class DBConnection {
+    private static final String URL = "jdbc:mysql://localhost:3306/events_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "password"; // Replace with your MySQL password
+    private static final String PASSWORD = ""; // Update with your MySQL password
 
     public static Connection getConnection() throws SQLException {
         try {

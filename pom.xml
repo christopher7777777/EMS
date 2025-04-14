@@ -12,21 +12,22 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Jakarta Servlet 6.0 API -->
+        <!-- Jakarta Servlet 6.1 API -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <version>6.1.0</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- MySQL Connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+
             <version>8.0.33</version>
         </dependency>
     </dependencies>
@@ -38,6 +39,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>
