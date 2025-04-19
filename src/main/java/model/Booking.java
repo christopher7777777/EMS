@@ -1,29 +1,45 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Booking {
     private int bookingId;
+    private int bookingEventId;
     private String bookingName;
     private String bookingEmail;
     private String bookingPhone;
     private String bookingSubject;
-    private Date bookingMeetingTime;
+    private Timestamp bookingMeetingTime;
     private String bookingAddress;
     private Date bookingDate;
-    private int eventId;
+    private int eventId; // Associated event
 
-    // Additional fields for display purposes
-    private String eventTitle;
-    private String username;
-
+    // Default constructor
     public Booking() {
     }
 
-    public Booking(int bookingId, String bookingName, String bookingEmail, String bookingPhone,
-                   String bookingSubject, Date bookingMeetingTime, String bookingAddress,
+    // Constructor without ID (for creating new bookings)
+    public Booking(int bookingEventId, String bookingName, String bookingEmail, String bookingPhone, 
+                   String bookingSubject, Timestamp bookingMeetingTime, String bookingAddress, 
                    Date bookingDate, int eventId) {
+        this.bookingEventId = bookingEventId;
+        this.bookingName = bookingName;
+        this.bookingEmail = bookingEmail;
+        this.bookingPhone = bookingPhone;
+        this.bookingSubject = bookingSubject;
+        this.bookingMeetingTime = bookingMeetingTime;
+        this.bookingAddress = bookingAddress;
+        this.bookingDate = bookingDate;
+        this.eventId = eventId;
+    }
+
+    // Full constructor
+    public Booking(int bookingId, int bookingEventId, String bookingName, String bookingEmail, 
+                   String bookingPhone, String bookingSubject, Timestamp bookingMeetingTime, 
+                   String bookingAddress, Date bookingDate, int eventId) {
         this.bookingId = bookingId;
+        this.bookingEventId = bookingEventId;
         this.bookingName = bookingName;
         this.bookingEmail = bookingEmail;
         this.bookingPhone = bookingPhone;
@@ -34,27 +50,21 @@ public class Booking {
         this.eventId = eventId;
     }
 
-    // Constructor without bookingId for new booking creation
-    public Booking(String bookingName, String bookingEmail, String bookingPhone,
-                   String bookingSubject, Date bookingMeetingTime, String bookingAddress,
-                   Date bookingDate, int eventId ) {
-        this.bookingName = bookingName;
-        this.bookingEmail = bookingEmail;
-        this.bookingPhone = bookingPhone;
-        this.bookingSubject = bookingSubject;
-        this.bookingMeetingTime = bookingMeetingTime;
-        this.bookingAddress = bookingAddress;
-        this.bookingDate = bookingDate;
-        this.eventId = eventId;
-
-    }
-
+    // Getters and setters
     public int getBookingId() {
         return bookingId;
     }
 
     public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
+    }
+
+    public int getBookingEventId() {
+        return bookingEventId;
+    }
+
+    public void setBookingEventId(int bookingEventId) {
+        this.bookingEventId = bookingEventId;
     }
 
     public String getBookingName() {
@@ -89,11 +99,11 @@ public class Booking {
         this.bookingSubject = bookingSubject;
     }
 
-    public Date getBookingMeetingTime() {
+    public Timestamp getBookingMeetingTime() {
         return bookingMeetingTime;
     }
 
-    public void setBookingMeetingTime(Date bookingMeetingTime) {
+    public void setBookingMeetingTime(Timestamp bookingMeetingTime) {
         this.bookingMeetingTime = bookingMeetingTime;
     }
 
@@ -121,27 +131,11 @@ public class Booking {
         this.eventId = eventId;
     }
 
-
-    public String getEventTitle() {
-        return eventTitle;
-    }
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public String toString() {
         return "Booking{" +
                 "bookingId=" + bookingId +
+                ", bookingEventId=" + bookingEventId +
                 ", bookingName='" + bookingName + '\'' +
                 ", bookingEmail='" + bookingEmail + '\'' +
                 ", bookingPhone='" + bookingPhone + '\'' +
@@ -150,7 +144,6 @@ public class Booking {
                 ", bookingAddress='" + bookingAddress + '\'' +
                 ", bookingDate=" + bookingDate +
                 ", eventId=" + eventId +
-
                 '}';
     }
 }

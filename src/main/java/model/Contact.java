@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Contact {
     private int contactId;
@@ -8,17 +8,25 @@ public class Contact {
     private String contactEmail;
     private String contactSubject;
     private String contactMessage;
-    private Date contactDate;
-    private int userId;
+    private Timestamp contactDate;
+    private Integer userId; // Optional user ID (nullable for anonymous messages)
 
-    // Additional field for display purposes
-    private String username;
-
+    // Default constructor
     public Contact() {
     }
 
-    public Contact(int contactId, String contactName, String contactEmail,
-                   String contactSubject, String contactMessage, Date contactDate, int userId) {
+    // Constructor without ID (for creating new contacts)
+    public Contact(String contactName, String contactEmail, String contactSubject, String contactMessage, Timestamp contactDate, Integer userId) {
+        this.contactName = contactName;
+        this.contactEmail = contactEmail;
+        this.contactSubject = contactSubject;
+        this.contactMessage = contactMessage;
+        this.contactDate = contactDate;
+        this.userId = userId;
+    }
+
+    // Full constructor
+    public Contact(int contactId, String contactName, String contactEmail, String contactSubject, String contactMessage, Timestamp contactDate, Integer userId) {
         this.contactId = contactId;
         this.contactName = contactName;
         this.contactEmail = contactEmail;
@@ -28,17 +36,7 @@ public class Contact {
         this.userId = userId;
     }
 
-    // Constructor without contactId for new contact creation
-    public Contact(String contactName, String contactEmail,
-                   String contactSubject, String contactMessage, Date contactDate, int userId) {
-        this.contactName = contactName;
-        this.contactEmail = contactEmail;
-        this.contactSubject = contactSubject;
-        this.contactMessage = contactMessage;
-        this.contactDate = contactDate;
-        this.userId = userId;
-    }
-
+    // Getters and setters
     public int getContactId() {
         return contactId;
     }
@@ -79,28 +77,20 @@ public class Contact {
         this.contactMessage = contactMessage;
     }
 
-    public Date getContactDate() {
+    public Timestamp getContactDate() {
         return contactDate;
     }
 
-    public void setContactDate(Date contactDate) {
+    public void setContactDate(Timestamp contactDate) {
         this.contactDate = contactDate;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     @Override

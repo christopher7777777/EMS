@@ -1,38 +1,36 @@
 package model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Blog {
     private int blogId;
     private String blogTitle;
     private String blogDescription;
-    private Date blogPostDate;
-    private int eventId;
+    private Timestamp blogPostDate;
+    private int eventId; // Associated event (optional)
 
-    // Additional field for display purposes
-    private String authorName;
-
+    // Default constructor
     public Blog() {
     }
 
-    public Blog(int blogId, String blogTitle, String blogDescription,
-                Date blogPostDate, int eventId) {
+    // Constructor without ID (for creating new blogs)
+    public Blog(String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId) {
+        this.blogTitle = blogTitle;
+        this.blogDescription = blogDescription;
+        this.blogPostDate = blogPostDate;
+        this.eventId = eventId;
+    }
+
+    // Full constructor
+    public Blog(int blogId, String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId) {
         this.blogId = blogId;
         this.blogTitle = blogTitle;
         this.blogDescription = blogDescription;
         this.blogPostDate = blogPostDate;
-        this.eventId= eventId;
+        this.eventId = eventId;
     }
 
-    // Constructor without blogId for new blog creation
-    public Blog(String blogTitle, String blogDescription,
-                Date blogPostDate, int eventID) {
-        this.blogTitle = blogTitle;
-        this.blogDescription = blogDescription;
-        this.blogPostDate = blogPostDate;
-        this.eventId= eventID;
-    }
-
+    // Getters and setters
     public int getBlogId() {
         return blogId;
     }
@@ -57,28 +55,20 @@ public class Blog {
         this.blogDescription = blogDescription;
     }
 
-    public Date getBlogPostDate() {
+    public Timestamp getBlogPostDate() {
         return blogPostDate;
     }
 
-    public void setBlogPostDate(Date blogPostDate) {
+    public void setBlogPostDate(Timestamp blogPostDate) {
         this.blogPostDate = blogPostDate;
     }
 
-    public int geteventId() {
+    public int getEventId() {
         return eventId;
     }
 
-    public void seteventId(int eventID) {
-        this.eventId= eventID;
-    }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     @Override
@@ -88,7 +78,7 @@ public class Blog {
                 ", blogTitle='" + blogTitle + '\'' +
                 ", blogDescription='" + blogDescription + '\'' +
                 ", blogPostDate=" + blogPostDate +
-                ", eventID=" + eventId+
+                ", eventId=" + eventId +
                 '}';
     }
 }

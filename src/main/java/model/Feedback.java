@@ -1,45 +1,53 @@
 package model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Feedback {
     private int feedbackId;
+    private int feedbackEventId;
     private int feedbackRating;
     private String feedbackComment;
-    private Date feedbackDate;
-    private int eventId;
+    private Timestamp feedbackDate;
+    private int eventId; // Associated event
 
-    // Additional fields for display purposes
-    private String eventTitle;
-    private String username;
-
+    // Default constructor
     public Feedback() {
     }
 
-    public Feedback(int feedbackId, int feedbackRating, String feedbackComment,
-                    Date feedbackDate, int eventId) {
+    // Constructor without ID (for creating new feedback)
+    public Feedback(int feedbackEventId, int feedbackRating, String feedbackComment, Timestamp feedbackDate, int eventId) {
+        this.feedbackEventId = feedbackEventId;
+        this.feedbackRating = feedbackRating;
+        this.feedbackComment = feedbackComment;
+        this.feedbackDate = feedbackDate;
+        this.eventId = eventId;
+    }
+
+    // Full constructor
+    public Feedback(int feedbackId, int feedbackEventId, int feedbackRating, String feedbackComment, Timestamp feedbackDate, int eventId) {
         this.feedbackId = feedbackId;
+        this.feedbackEventId = feedbackEventId;
         this.feedbackRating = feedbackRating;
         this.feedbackComment = feedbackComment;
         this.feedbackDate = feedbackDate;
         this.eventId = eventId;
     }
 
-    // Constructor without feedbackId for new feedback creation
-    public Feedback(int feedbackRating, String feedbackComment,
-                    Date feedbackDate, int eventId, int userId) {
-        this.feedbackRating = feedbackRating;
-        this.feedbackComment = feedbackComment;
-        this.feedbackDate = feedbackDate;
-        this.eventId = eventId;
-    }
-
+    // Getters and setters
     public int getFeedbackId() {
         return feedbackId;
     }
 
     public void setFeedbackId(int feedbackId) {
         this.feedbackId = feedbackId;
+    }
+
+    public int getFeedbackEventId() {
+        return feedbackEventId;
+    }
+
+    public void setFeedbackEventId(int feedbackEventId) {
+        this.feedbackEventId = feedbackEventId;
     }
 
     public int getFeedbackRating() {
@@ -58,11 +66,11 @@ public class Feedback {
         this.feedbackComment = feedbackComment;
     }
 
-    public Date getFeedbackDate() {
+    public Timestamp getFeedbackDate() {
         return feedbackDate;
     }
 
-    public void setFeedbackDate(Date feedbackDate) {
+    public void setFeedbackDate(Timestamp feedbackDate) {
         this.feedbackDate = feedbackDate;
     }
 
@@ -74,27 +82,11 @@ public class Feedback {
         this.eventId = eventId;
     }
 
-
-    public String getEventTitle() {
-        return eventTitle;
-    }
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public String toString() {
         return "Feedback{" +
                 "feedbackId=" + feedbackId +
+                ", feedbackEventId=" + feedbackEventId +
                 ", feedbackRating=" + feedbackRating +
                 ", feedbackComment='" + feedbackComment + '\'' +
                 ", feedbackDate=" + feedbackDate +

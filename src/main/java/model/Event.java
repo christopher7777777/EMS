@@ -1,7 +1,6 @@
 package model;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 
 public class Event {
     private int eventId;
@@ -10,16 +9,24 @@ public class Event {
     private Date eventDate;
     private String eventLocation;
     private double eventPrice;
-    private int userId;
+    private int userId; // Creator of the event (admin)
 
-    // Additional field to hold user information
-    private String createdByUsername;
-
+    // Default constructor
     public Event() {
     }
 
-    public Event(int eventId, String eventTitle, String eventDescription, Date eventDate,
-                 String eventLocation, double eventPrice, int userId) {
+    // Constructor without ID (for creating new events)
+    public Event(String eventTitle, String eventDescription, Date eventDate, String eventLocation, double eventPrice, int userId) {
+        this.eventTitle = eventTitle;
+        this.eventDescription = eventDescription;
+        this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
+        this.eventPrice = eventPrice;
+        this.userId = userId;
+    }
+
+    // Full constructor
+    public Event(int eventId, String eventTitle, String eventDescription, Date eventDate, String eventLocation, double eventPrice, int userId) {
         this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
@@ -29,17 +36,7 @@ public class Event {
         this.userId = userId;
     }
 
-    // Constructor without eventId for new event creation
-    public Event(String eventTitle, String eventDescription, Date eventDate,
-                 String eventLocation, double eventPrice, int userId) {
-        this.eventTitle = eventTitle;
-        this.eventDescription = eventDescription;
-        this.eventDate = eventDate;
-        this.eventLocation = eventLocation;
-        this.eventPrice = eventPrice;
-        this.userId = userId;
-    }
-
+    // Getters and setters
     public int getEventId() {
         return eventId;
     }
@@ -94,14 +91,6 @@ public class Event {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getCreatedByUsername() {
-        return createdByUsername;
-    }
-
-    public void setCreatedByUsername(String createdByUsername) {
-        this.createdByUsername = createdByUsername;
     }
 
     @Override

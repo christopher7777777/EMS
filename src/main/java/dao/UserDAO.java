@@ -1,332 +1,554 @@
 package dao;
 
 import model.User;
-import com.eventmanagement.util.DBUtil;
+import utils.DatabaseUtil;
+import utils.PasswordHash;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for User entity
+ */
 public class UserDAO {
 
-    public User authenticate(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ? AND is_active = true";
-        Connection conn = null;
-
+    /**
+     * Add a new user to the database
+     * @param user User object to be added
+     * @return the ID of the newly added user, or -1 if operation failed
+     */
+    public int addUser(User user) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return extractUserFromResultSet(rs);
+            connection = DatabaseUtil.getConnection();
+            
+            // Hash the password before storing
+            String hashedPassword = PasswordHash.hashPasswordWithNewSalt(user.getPassword());
+            
+            String query = "INSERT INTO users (username, password, email, role, profile_picture, is_active) VALUES (?, ?, ?, ?, ?, ?)";
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, hashedPassword);
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getRole().toString());
+            statement.setBytes(5, user.getProfilePicture());
+            statement.setBoolean(6, user.isActive());
+            
+            int affectedRows = statement.executeUpdate();
+            
+            if (affectedRows == 0) {
+                return -1;
+            }
+            
+            resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return -1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         } finally {
-            DBUtil.closeConnection(conn);
-        }
-
-        return null;
-    }
-
-
-    public User createUser(User user) {
-        String sql = "INSERT INTO users (username, password, email, role, profile_picture, is_active) VALUES (?, ?, ?, ?, ?, ?)";
-        Connection conn = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getRole());
-            stmt.setString(5, user.getProfilePicture());
-            stmt.setBoolean(6, user.isActive());
-
-            int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows == 0) {
-                return null;
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-            ResultSet generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                user.setUserId(generatedKeys.getInt(1));
+        }
+    }
+    
+    /**
+     * Get a user by ID
+     * @param userId the ID of the user to retrieve
+     * @return User object if found, null otherwise
+     */
+    public User getUserById(int userId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT * FROM users WHERE users_id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userId);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("users_id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password")); // Note: This is the hashed password
+                user.setEmail(resultSet.getString("email"));
+                user.setRole(User.Role.valueOf(resultSet.getString("role")));
+                user.setProfilePicture(resultSet.getBytes("profile_picture"));
+                user.setActive(resultSet.getBoolean("is_active"));
+                
                 return user;
             }
+            
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         } finally {
-            DBUtil.closeConnection(conn);
-        }
-
-        return null;
-    }
-
-
-    public User getUserById(int userId) {
-        String sql = "SELECT * FROM users WHERE user_id = ?";
-        Connection conn = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return extractUserFromResultSet(rs);
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeConnection(conn);
         }
-
-        return null;
     }
-
+    
+    /**
+     * Get a user by username
+     * @param username the username of the user to retrieve
+     * @return User object if found, null otherwise
+     */
     public User getUserByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        Connection conn = null;
-
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return extractUserFromResultSet(rs);
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT * FROM users WHERE username = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("users_id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password")); // Note: This is the hashed password
+                user.setEmail(resultSet.getString("email"));
+                user.setRole(User.Role.valueOf(resultSet.getString("role")));
+                user.setProfilePicture(resultSet.getBytes("profile_picture"));
+                user.setActive(resultSet.getBoolean("is_active"));
+                
+                return user;
             }
+            
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         } finally {
-            DBUtil.closeConnection(conn);
-        }
-
-        return null;
-    }
-
-    public User getUserByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
-        Connection conn = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return extractUserFromResultSet(rs);
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeConnection(conn);
         }
-
-        return null;
     }
-
-
+    
+    /**
+     * Get all users
+     * @return List of all users
+     */
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM users ORDER BY user_id DESC";
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         List<User> users = new ArrayList<>();
-        Connection conn = null;
-
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                users.add(extractUserFromResultSet(rs));
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT * FROM users";
+            statement = connection.prepareStatement(query);
+            
+            resultSet = statement.executeQuery();
+            
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("users_id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password")); // Note: This is the hashed password
+                user.setEmail(resultSet.getString("email"));
+                user.setRole(User.Role.valueOf(resultSet.getString("role")));
+                user.setProfilePicture(resultSet.getBytes("profile_picture"));
+                user.setActive(resultSet.getBoolean("is_active"));
+                
+                users.add(user);
             }
+            
+            return users;
         } catch (SQLException e) {
             e.printStackTrace();
+            return users; // Return empty list on error
         } finally {
-            DBUtil.closeConnection(conn);
-        }
-
-        return users;
-    }
-
-    public List<User> getAllCustomers() {
-        String sql = "SELECT * FROM users WHERE role = 'customer' ORDER BY user_id DESC";
-        List<User> users = new ArrayList<>();
-        Connection conn = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                users.add(extractUserFromResultSet(rs));
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.closeConnection(conn);
         }
-
-        return users;
     }
-
+    
+    /**
+     * Update a user in the database
+     * @param user User object with updated values
+     * @return true if update was successful, false otherwise
+     */
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET username = ?, email = ?, role = ?, profile_picture = ?, is_active = ? WHERE user_id = ?";
-        Connection conn = null;
-
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getRole());
-            stmt.setString(4, user.getProfilePicture());
-            stmt.setBoolean(5, user.isActive());
-            stmt.setInt(6, user.getUserId());
-
-            int affectedRows = stmt.executeUpdate();
+            connection = DatabaseUtil.getConnection();
+            String query;
+            
+            // If password is to be updated, include it in the query
+            if (user.getPassword() != null && !user.getPassword().startsWith("SHA-256:")) {
+                // Password is in plaintext, hash it
+                String hashedPassword = PasswordHash.hashPasswordWithNewSalt(user.getPassword());
+                
+                query = "UPDATE users SET username = ?, password = ?, email = ?, role = ?, profile_picture = ?, is_active = ? WHERE users_id = ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, user.getUsername());
+                statement.setString(2, hashedPassword);
+                statement.setString(3, user.getEmail());
+                statement.setString(4, user.getRole().toString());
+                statement.setBytes(5, user.getProfilePicture());
+                statement.setBoolean(6, user.isActive());
+                statement.setInt(7, user.getUserId());
+            } else {
+                // Don't update password
+                query = "UPDATE users SET username = ?, email = ?, role = ?, profile_picture = ?, is_active = ? WHERE users_id = ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, user.getUsername());
+                statement.setString(2, user.getEmail());
+                statement.setString(3, user.getRole().toString());
+                statement.setBytes(4, user.getProfilePicture());
+                statement.setBoolean(5, user.isActive());
+                statement.setInt(6, user.getUserId());
+            }
+            
+            int affectedRows = statement.executeUpdate();
+            
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         } finally {
-            DBUtil.closeConnection(conn);
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
-    public boolean updatePassword(int userId, String newPassword) {
-        String sql = "UPDATE users SET password = ? WHERE user_id = ?";
-        Connection conn = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, newPassword);
-            stmt.setInt(2, userId);
-
-            int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            DBUtil.closeConnection(conn);
-        }
-    }
-
+    
+    /**
+     * Delete a user from the database
+     * @param userId the ID of the user to delete
+     * @return true if deletion was successful, false otherwise
+     */
     public boolean deleteUser(int userId) {
-        String sql = "DELETE FROM users WHERE user_id = ?";
-        Connection conn = null;
-
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
-
-            int affectedRows = stmt.executeUpdate();
+            connection = DatabaseUtil.getConnection();
+            String query = "DELETE FROM users WHERE users_id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userId);
+            
+            int affectedRows = statement.executeUpdate();
+            
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         } finally {
-            DBUtil.closeConnection(conn);
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
-
+    
+    /**
+     * Toggle the active status of a user
+     * @param userId the ID of the user to toggle
+     * @param isActive the new active status
+     * @return true if update was successful, false otherwise
+     */
     public boolean toggleUserActiveStatus(int userId, boolean isActive) {
-        String sql = "UPDATE users SET is_active = ? WHERE user_id = ?";
-        Connection conn = null;
-
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setBoolean(1, isActive);
-            stmt.setInt(2, userId);
-
-            int affectedRows = stmt.executeUpdate();
+            connection = DatabaseUtil.getConnection();
+            String query = "UPDATE users SET is_active = ? WHERE users_id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setBoolean(1, isActive);
+            statement.setInt(2, userId);
+            
+            int affectedRows = statement.executeUpdate();
+            
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         } finally {
-            DBUtil.closeConnection(conn);
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
-    public int countUsers() {
-        String sql = "SELECT COUNT(*) FROM users";
-        Connection conn = null;
-
+    
+    /**
+     * Authenticate a user
+     * @param username the username of the user
+     * @param password the password of the user (plaintext)
+     * @return User object if authentication was successful, null otherwise
+     */
+    public User authenticateUser(String username, String password) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
         try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT * FROM users WHERE username = ? AND is_active = TRUE";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                // Verify password
+                String storedPassword = resultSet.getString("password");
+                if (PasswordHash.verifyPassword(password, storedPassword)) {
+                    User user = new User();
+                    user.setUserId(resultSet.getInt("users_id"));
+                    user.setUsername(resultSet.getString("username"));
+                    user.setPassword(storedPassword); // Store the hashed password
+                    user.setEmail(resultSet.getString("email"));
+                    user.setRole(User.Role.valueOf(resultSet.getString("role")));
+                    user.setProfilePicture(resultSet.getBytes("profile_picture"));
+                    user.setActive(resultSet.getBoolean("is_active"));
+                    
+                    return user;
+                }
             }
+            
+            return null; // Authentication failed
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         } finally {
-            DBUtil.closeConnection(conn);
-        }
-
-        return 0;
-    }
-
-
-    public int countCustomers() {
-        String sql = "SELECT COUNT(*) FROM users WHERE role = 'customer'";
-        Connection conn = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+        }
+    }
+    
+    /**
+     * Check if a username already exists
+     * @param username the username to check
+     * @return true if username exists, false otherwise
+     */
+    public boolean usernameExists(String username) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT COUNT(*) FROM users WHERE username = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+            
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
-            DBUtil.closeConnection(conn);
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
-        return 0;
     }
-
-
-    private User extractUserFromResultSet(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setUserId(rs.getInt("user_id"));
-        user.setUsername(rs.getString("username"));
-        user.setPassword(rs.getString("password"));
-        user.setEmail(rs.getString("email"));
-        user.setRole(rs.getString("role"));
-        user.setProfilePicture(rs.getString("profile_picture"));
-        user.setActive(rs.getBoolean("is_active"));
-        return user;
+    
+    /**
+     * Check if an email already exists
+     * @param email the email to check
+     * @return true if email exists, false otherwise
+     */
+    public boolean emailExists(String email) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, email);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+            
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Count total users
+     * @return total number of users
+     */
+    public int countTotalUsers() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT COUNT(*) FROM users";
+            statement = connection.prepareStatement(query);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Count active users
+     * @return number of active users
+     */
+    public int countActiveUsers() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT COUNT(*) FROM users WHERE is_active = TRUE";
+            statement = connection.prepareStatement(query);
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Count users by role
+     * @param role the role to count
+     * @return number of users with the specified role
+     */
+    public int countUsersByRole(User.Role role) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT COUNT(*) FROM users WHERE role = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, role.toString());
+            
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
