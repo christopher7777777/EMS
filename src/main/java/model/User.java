@@ -105,7 +105,7 @@ public class User {
     public boolean isCustomer() {
         return role == Role.CUSTOMER;
     }
-
+// use for override
     @Override
     public String toString() {
         return "User{" +
