@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-    // Check if user is already logged in
     if (session.getAttribute("user") != null) {
         response.sendRedirect(request.getContextPath() + "/");
         return;
@@ -71,7 +70,7 @@
             </div>
         </div>
     </main>
-    
+    // footer must include
     <!-- Include Footer -->
     <jsp:include page="/includes/footer.jsp" />
     
