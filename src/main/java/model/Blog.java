@@ -21,7 +21,7 @@ public class Blog {
         this.eventId = eventId;
     }
 
-    // Full constructor
+    // Full constructor with id
     public Blog(int blogId, String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId) {
         this.blogId = blogId;
         this.blogTitle = blogTitle;
