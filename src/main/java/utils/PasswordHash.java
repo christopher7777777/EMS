@@ -12,22 +12,14 @@ public class PasswordHash {
     private static final String HASH_ALGORITHM = "SHA-256";
     private static final int SALT_LENGTH = 16; // 16 bytes = 128 bits
     
-    /**
-     * Generate a random salt for password hashing
-     * @return random salt as byte array
-     */
+
     public static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_LENGTH];
         random.nextBytes(salt);
         return salt;
     }
-    
-    /**
-     * Convert a byte array to hexadecimal string
-     * @param bytes byte array to convert
-     * @return hexadecimal string representation
-     */
+
     public static String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
         for (byte b : bytes) {
@@ -40,11 +32,7 @@ public class PasswordHash {
         return hexString.toString();
     }
     
-    /**
-     * Convert a hexadecimal string to byte array
-     * @param hex hexadecimal string to convert
-     * @return byte array
-     */
+
     public static byte[] hexToBytes(String hex) {
         int len = hex.length();
         byte[] data = new byte[len / 2];
@@ -55,12 +43,7 @@ public class PasswordHash {
         return data;
     }
     
-    /**
-     * Hash a password using SHA-256
-     * @param password password to hash
-     * @param salt salt for hashing
-     * @return hashed password as hexadecimal string
-     */
+
     public static String hashPassword(String password, byte[] salt) {
         try {
             MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
@@ -72,23 +55,14 @@ public class PasswordHash {
         }
     }
     
-    /**
-     * Hash a password with a new random salt
-     * @param password password to hash
-     * @return salt and hashed password separated by colon
-     */
+
     public static String hashPasswordWithNewSalt(String password) {
         byte[] salt = generateSalt();
         String hashedPassword = hashPassword(password, salt);
         return bytesToHex(salt) + ":" + hashedPassword;
     }
     
-    /**
-     * Verify if a password matches the stored hash
-     * @param password password to verify
-     * @param storedHash stored hash (salt:hash)
-     * @return true if password matches, false otherwise
-     */
+
     public static boolean verifyPassword(String password, String storedHash) {
         String[] parts = storedHash.split(":");
         if (parts.length != 2) {

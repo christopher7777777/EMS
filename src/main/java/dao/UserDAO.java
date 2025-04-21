@@ -177,7 +177,7 @@ public class UserDAO {
                 User user = new User();
                 user.setUserId(resultSet.getInt("users_id"));
                 user.setUsername(resultSet.getString("username"));
-                user.setPassword(resultSet.getString("password")); // Note: This is the hashed password
+                user.setPassword(resultSet.getString("password"));
                 user.setEmail(resultSet.getString("email"));
                 user.setRole(User.Role.valueOf(resultSet.getString("role")));
                 user.setProfilePicture(resultSet.getBytes("profile_picture"));
