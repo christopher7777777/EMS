@@ -10,23 +10,25 @@ public class Event {
     private String eventLocation;
     private double eventPrice;
     private int userId; // Creator of the event (admin)
+    private byte[] eventImage; // Store image as byte array
 
     // Default constructor
     public Event() {
     }
 
     // Constructor without ID (for creating new events)
-    public Event(String eventTitle, String eventDescription, Date eventDate, String eventLocation, double eventPrice, int userId) {
+    public Event(String eventTitle, String eventDescription, Date eventDate, String eventLocation, double eventPrice, int userId, byte[] eventImage) {
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
         this.eventLocation = eventLocation;
         this.eventPrice = eventPrice;
         this.userId = userId;
+        this.eventImage = eventImage;
     }
 
     // Full constructor
-    public Event(int eventId, String eventTitle, String eventDescription, Date eventDate, String eventLocation, double eventPrice, int userId) {
+    public Event(int eventId, String eventTitle, String eventDescription, Date eventDate, String eventLocation, double eventPrice, int userId, byte[] eventImage) {
         this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
@@ -34,6 +36,7 @@ public class Event {
         this.eventLocation = eventLocation;
         this.eventPrice = eventPrice;
         this.userId = userId;
+        this.eventImage = eventImage;
     }
 
     // Getters and setters
@@ -93,6 +96,14 @@ public class Event {
         this.userId = userId;
     }
 
+    public byte[] getEventImage() {
+        return eventImage;
+    }
+
+    public void setEventImage(byte[] eventImage) {
+        this.eventImage = eventImage;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -103,6 +114,7 @@ public class Event {
                 ", eventLocation='" + eventLocation + '\'' +
                 ", eventPrice=" + eventPrice +
                 ", userId=" + userId +
+                ", eventImage=" + (eventImage != null ? "Image Present" : "No Image") +
                 '}';
     }
 }

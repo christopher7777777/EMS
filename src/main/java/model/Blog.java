@@ -7,7 +7,7 @@ public class Blog {
     private String blogTitle;
     private String blogDescription;
     private Timestamp blogPostDate;
-    private int eventId; // Associated event (optional)
+    private int eventId;
 
     // Default constructor
     public Blog() {

@@ -17,6 +17,7 @@ CREATE TABLE event (
                        event_date DATE NOT NULL,
                        event_location VARCHAR(255) NOT NULL,
                        event_price DECIMAL(10, 2) NOT NULL,
+                       event_image MEDIUMBLOB,
                        User_id INT NOT NULL,
                        FOREIGN KEY (User_id) REFERENCES users(users_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
