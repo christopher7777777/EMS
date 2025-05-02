@@ -9,7 +9,7 @@
     <div class="container">
         <nav class="navbar <%= request.getAttribute("mobileMenuOpen") != null ? "mobile-menu-open" : "mobile-menu-closed" %>">
             <a href="${pageContext.request.contextPath}/" class="brand">Event Manager</a>
-            
+
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -17,14 +17,14 @@
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
-            
+
             <ul class="nav-menu">
                 <li><a href="${pageContext.request.contextPath}/" class="nav-link">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/events" class="nav-link">Events</a></li>
                 <li><a href="${pageContext.request.contextPath}/blogs" class="nav-link">Blog</a></li>
                 <li><a href="${pageContext.request.contextPath}/about" class="nav-link">About Us</a></li>
                 <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
-                
+
                 <% if (isLoggedIn) { %>
                 <li class="user-dropdown">
                     <div class="user-dropdown-toggle">

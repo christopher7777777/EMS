@@ -64,7 +64,7 @@
                     </div>
                     <div class="event-card-header">
                         <h3 class="event-title"><%= event.getEventTitle() %></h3>
-                        <span class="event-price">$<%= String.format("%.2f", event.getEventPrice()) %></span>
+                        <span class="event-price">Rs <%= String.format("%.2f", event.getEventPrice()) %></span>
                     </div>
                     <div class="event-card-body">
                         <p class="event-date"><strong>Date:</strong> <%= event.getEventDate() %></p>

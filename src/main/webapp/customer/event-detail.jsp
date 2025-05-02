@@ -27,7 +27,7 @@
         <div class="container">
             <div class="event-detail-header">
                 <h1 class="event-title"><%= event.getEventTitle() %></h1>
-                <span class="event-price">$<%= String.format("%.2f", event.getEventPrice()) %></span>
+                <span class="event-price">Rs <%= String.format("%.2f", event.getEventPrice()) %></span>
             </div>
 
             <div class="event-details">

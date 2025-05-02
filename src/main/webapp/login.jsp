@@ -74,6 +74,6 @@
     <!-- Include Footer -->
     <jsp:include page="/includes/footer.jsp" />
     
-    <script src="${pageContext.request.contextPath}/js/main.js"></script>
+   <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

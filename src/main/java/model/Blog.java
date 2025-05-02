@@ -8,26 +8,29 @@ public class Blog {
     private String blogDescription;
     private Timestamp blogPostDate;
     private int eventId;
+    private byte[] blogImage; // New field for image
 
     // Default constructor
     public Blog() {
     }
 
     // Constructor without ID (for creating new blogs)
-    public Blog(String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId) {
+    public Blog(String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId, byte[] blogImage) {
         this.blogTitle = blogTitle;
         this.blogDescription = blogDescription;
         this.blogPostDate = blogPostDate;
         this.eventId = eventId;
+        this.blogImage = blogImage;
     }
 
     // Full constructor with id
-    public Blog(int blogId, String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId) {
+    public Blog(int blogId, String blogTitle, String blogDescription, Timestamp blogPostDate, int eventId, byte[] blogImage) {
         this.blogId = blogId;
         this.blogTitle = blogTitle;
         this.blogDescription = blogDescription;
         this.blogPostDate = blogPostDate;
         this.eventId = eventId;
+        this.blogImage = blogImage;
     }
 
     // Getters and setters
@@ -71,6 +74,14 @@ public class Blog {
         this.eventId = eventId;
     }
 
+    public byte[] getBlogImage() {
+        return blogImage;
+    }
+
+    public void setBlogImage(byte[] blogImage) {
+        this.blogImage = blogImage;
+    }
+
     @Override
     public String toString() {
         return "Blog{" +
@@ -79,6 +90,7 @@ public class Blog {
                 ", blogDescription='" + blogDescription + '\'' +
                 ", blogPostDate=" + blogPostDate +
                 ", eventId=" + eventId +
+                ", blogImage=" + (blogImage != null ? "present" : "null") +
                 '}';
     }
 }

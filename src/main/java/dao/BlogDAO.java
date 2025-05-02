@@ -21,22 +21,27 @@ public class BlogDAO {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        
+
         try {
             connection = DatabaseUtil.getConnection();
-            String query = "INSERT INTO blog (blog_title, blog_description, blog_post_date, Event_id) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO blog (blog_title, blog_description, blog_post_date, Event_id, blog_image) VALUES (?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, blog.getBlogTitle());
             statement.setString(2, blog.getBlogDescription());
             statement.setTimestamp(3, blog.getBlogPostDate());
             statement.setInt(4, blog.getEventId());
-            
+            if (blog.getBlogImage() != null) {
+                statement.setBytes(5, blog.getBlogImage());
+            } else {
+                statement.setNull(5, Types.BLOB);
+            }
+
             int affectedRows = statement.executeUpdate();
-            
+
             if (affectedRows == 0) {
                 return -1;
             }
-            
+
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
@@ -56,7 +61,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Get a blog by ID
      * @param blogId the ID of the blog to retrieve
@@ -66,15 +71,15 @@ public class BlogDAO {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "SELECT * FROM blog WHERE blog_id = ?";
             statement = connection.prepareStatement(query);
             statement.setInt(1, blogId);
-            
+
             resultSet = statement.executeQuery();
-            
+
             if (resultSet.next()) {
                 Blog blog = new Blog();
                 blog.setBlogId(resultSet.getInt("blog_id"));
@@ -82,10 +87,11 @@ public class BlogDAO {
                 blog.setBlogDescription(resultSet.getString("blog_description"));
                 blog.setBlogPostDate(resultSet.getTimestamp("blog_post_date"));
                 blog.setEventId(resultSet.getInt("Event_id"));
-                
+                blog.setBlogImage(resultSet.getBytes("blog_image"));
+
                 return blog;
             }
-            
+
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,7 +106,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Get all blogs
      * @return List of all blogs
@@ -110,14 +116,14 @@ public class BlogDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<Blog> blogs = new ArrayList<>();
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "SELECT * FROM blog ORDER BY blog_post_date DESC";
             statement = connection.prepareStatement(query);
-            
+
             resultSet = statement.executeQuery();
-            
+
             while (resultSet.next()) {
                 Blog blog = new Blog();
                 blog.setBlogId(resultSet.getInt("blog_id"));
@@ -125,10 +131,11 @@ public class BlogDAO {
                 blog.setBlogDescription(resultSet.getString("blog_description"));
                 blog.setBlogPostDate(resultSet.getTimestamp("blog_post_date"));
                 blog.setEventId(resultSet.getInt("Event_id"));
-                
+                blog.setBlogImage(resultSet.getBytes("blog_image"));
+
                 blogs.add(blog);
             }
-            
+
             return blogs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,7 +150,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Get paginated blogs
      * @param offset the starting index
@@ -155,16 +162,16 @@ public class BlogDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<Blog> blogs = new ArrayList<>();
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "SELECT * FROM blog ORDER BY blog_post_date DESC LIMIT ? OFFSET ?";
             statement = connection.prepareStatement(query);
             statement.setInt(1, limit);
             statement.setInt(2, offset);
-            
+
             resultSet = statement.executeQuery();
-            
+
             while (resultSet.next()) {
                 Blog blog = new Blog();
                 blog.setBlogId(resultSet.getInt("blog_id"));
@@ -172,10 +179,11 @@ public class BlogDAO {
                 blog.setBlogDescription(resultSet.getString("blog_description"));
                 blog.setBlogPostDate(resultSet.getTimestamp("blog_post_date"));
                 blog.setEventId(resultSet.getInt("Event_id"));
-                
+                blog.setBlogImage(resultSet.getBytes("blog_image"));
+
                 blogs.add(blog);
             }
-            
+
             return blogs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -190,7 +198,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Get blogs by event ID
      * @param eventId the ID of the event to get blogs for
@@ -201,15 +209,15 @@ public class BlogDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<Blog> blogs = new ArrayList<>();
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "SELECT * FROM blog WHERE Event_id = ? ORDER BY blog_post_date DESC";
             statement = connection.prepareStatement(query);
             statement.setInt(1, eventId);
-            
+
             resultSet = statement.executeQuery();
-            
+
             while (resultSet.next()) {
                 Blog blog = new Blog();
                 blog.setBlogId(resultSet.getInt("blog_id"));
@@ -217,10 +225,11 @@ public class BlogDAO {
                 blog.setBlogDescription(resultSet.getString("blog_description"));
                 blog.setBlogPostDate(resultSet.getTimestamp("blog_post_date"));
                 blog.setEventId(resultSet.getInt("Event_id"));
-                
+                blog.setBlogImage(resultSet.getBytes("blog_image"));
+
                 blogs.add(blog);
             }
-            
+
             return blogs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -235,7 +244,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Update a blog in the database
      * @param blog Blog object with updated values
@@ -244,17 +253,22 @@ public class BlogDAO {
     public boolean updateBlog(Blog blog) {
         Connection connection = null;
         PreparedStatement statement = null;
-        
+
         try {
             connection = DatabaseUtil.getConnection();
-            String query = "UPDATE blog SET blog_title = ?, blog_description = ? WHERE blog_id = ?";
+            String query = "UPDATE blog SET blog_title = ?, blog_description = ?, blog_image = ? WHERE blog_id = ?";
             statement = connection.prepareStatement(query);
             statement.setString(1, blog.getBlogTitle());
             statement.setString(2, blog.getBlogDescription());
-            statement.setInt(3, blog.getBlogId());
-            
+            if (blog.getBlogImage() != null) {
+                statement.setBytes(3, blog.getBlogImage());
+            } else {
+                statement.setNull(3, Types.BLOB);
+            }
+            statement.setInt(4, blog.getBlogId());
+
             int affectedRows = statement.executeUpdate();
-            
+
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -268,7 +282,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Delete a blog from the database
      * @param blogId the ID of the blog to delete
@@ -277,15 +291,15 @@ public class BlogDAO {
     public boolean deleteBlog(int blogId) {
         Connection connection = null;
         PreparedStatement statement = null;
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "DELETE FROM blog WHERE blog_id = ?";
             statement = connection.prepareStatement(query);
             statement.setInt(1, blogId);
-            
+
             int affectedRows = statement.executeUpdate();
-            
+
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -299,9 +313,9 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
-     * Search for blogs by title
+     * Search for blogs by title or description
      * @param keyword the search keyword
      * @return List of matching blogs
      */
@@ -310,16 +324,16 @@ public class BlogDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         List<Blog> blogs = new ArrayList<>();
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "SELECT * FROM blog WHERE blog_title LIKE ? OR blog_description LIKE ? ORDER BY blog_post_date DESC";
             statement = connection.prepareStatement(query);
             statement.setString(1, "%" + keyword + "%");
             statement.setString(2, "%" + keyword + "%");
-            
+
             resultSet = statement.executeQuery();
-            
+
             while (resultSet.next()) {
                 Blog blog = new Blog();
                 blog.setBlogId(resultSet.getInt("blog_id"));
@@ -327,10 +341,11 @@ public class BlogDAO {
                 blog.setBlogDescription(resultSet.getString("blog_description"));
                 blog.setBlogPostDate(resultSet.getTimestamp("blog_post_date"));
                 blog.setEventId(resultSet.getInt("Event_id"));
-                
+                blog.setBlogImage(resultSet.getBytes("blog_image"));
+
                 blogs.add(blog);
             }
-            
+
             return blogs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -345,7 +360,7 @@ public class BlogDAO {
             }
         }
     }
-    
+
     /**
      * Count total blogs
      * @return total number of blogs
@@ -354,18 +369,18 @@ public class BlogDAO {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        
+
         try {
             connection = DatabaseUtil.getConnection();
             String query = "SELECT COUNT(*) FROM blog";
             statement = connection.prepareStatement(query);
-            
+
             resultSet = statement.executeQuery();
-            
+
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
-            
+
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();

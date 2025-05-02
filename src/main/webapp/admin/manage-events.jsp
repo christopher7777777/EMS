@@ -96,8 +96,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="eventPrice">Event Price</label>
-                    <input type="number" id="eventPrice" name="eventPrice" step="0.01" value="<%= isEditing ? eventToEdit.getEventPrice() : "" %>" required>
+                    <label for="eventPrice">Event Price (Rs)</label>
+                    <input type="number" id="eventPrice" name="eventPrice" step="0.01" value="<%= isEditing ? eventToEdit.getEventPrice() : "" %>" placeholder="Price in Rs" required>
                 </div>
 
                 <div class="form-group">
@@ -137,7 +137,7 @@
                     <td><%= event.getEventTitle() %></td>
                     <td><%= event.getEventDate() %></td>
                     <td><%= event.getEventLocation() %></td>
-                    <td>$<%= String.format("%.2f", event.getEventPrice()) %></td>
+                    <td>Rs <%= String.format("%.2f", event.getEventPrice()) %></td>
                     <td><%= event.getEventImage() != null ? "Image Present" : "No Image" %></td>
                     <td>
                         <a href="${pageContext.request.contextPath}/admin/events/edit?id=<%= event.getEventId() %>" class="btn btn-small btn-secondary">Edit</a>

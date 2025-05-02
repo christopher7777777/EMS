@@ -7,7 +7,6 @@
     <title>About Us - Event Management System</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-
         /* Team member styles */
         .team-section {
             margin: 60px 0;
@@ -145,12 +144,21 @@
                 </div>
             </section>
 
+            <%-- Conditionally display the CTA box if the user is not logged in --%>
+            <%
+                // Check if the user is logged in by checking the session attribute
+                Object user = session.getAttribute("user");
+                if (user == null) {
+            %>
             <div class="cta-box">
                 <h3>Ready to plan your next event?</h3>
                 <p>Join us today and experience the difference of professional event management.</p>
                 <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Sign Up Now</a>
                 <a href="${pageContext.request.contextPath}/contact" class="btn btn-secondary">Contact Us</a>
             </div>
+            <%
+                }
+            %>
         </div>
     </section>
 </main>
