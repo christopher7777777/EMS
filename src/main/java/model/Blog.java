@@ -4,12 +4,12 @@ import java.sql.Timestamp; // Importing Timestamp class to store date and time o
 // This class represents a blog post with properties such as title, description, date, related event, and an image.
 public class Blog {
     // Fields representing blog details
-    private int blogId; // Unique identifier for the blog post
-    private String blogTitle; // Title of the blog
-    private String blogDescription; // Description/content of the blog
-    private Timestamp blogPostDate; // Date and time when the blog was posted
-    private int eventId; // ID of the related event, if any
-    private byte[] blogImage; // Image associated with the blog (stored as byte array)
+    private int blogId; 
+    private String blogTitle;
+    private String blogDescription; 
+    private Timestamp blogPostDate; 
+    private int eventId; 
+    private byte[] blogImage; 
 
     // Default constructor - used when no initial values are provided
     public Blog() {
