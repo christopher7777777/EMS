@@ -3,14 +3,16 @@ package model;
 import java.io.InputStream;
 
 public class User {
+    // User attributes
     private int userId;
     private String username;
     private String password;
     private String email;
-    private Role role;
-    private byte[] profilePicture;
-    private boolean isActive;
+    private Role role; // Role can be ADMIN or CUSTOMER
+    private byte[] profilePicture; // User profile picture stored as byte array
+    private boolean isActive; // Indicates if the user account is active
 
+    // Enum for user roles
     public enum Role {
         ADMIN, CUSTOMER
     }
@@ -19,7 +21,7 @@ public class User {
     public User() {
     }
 
-    // Constructor without userId and profilePicture (for new user registration)
+    // Constructor for new user registration (without ID and profile picture)
     public User(String username, String password, String email, Role role, boolean isActive) {
         this.username = username;
         this.password = password;
@@ -28,7 +30,7 @@ public class User {
         this.isActive = isActive;
     }
 
-    // Full constructor
+    // Full constructor including userId and profile picture
     public User(int userId, String username, String password, String email, Role role, byte[] profilePicture, boolean isActive) {
         this.userId = userId;
         this.username = username;
@@ -39,7 +41,8 @@ public class User {
         this.isActive = isActive;
     }
 
-    // Getters and Setters
+    // Getter and setter methods
+
     public int getUserId() {
         return userId;
     }
@@ -96,16 +99,17 @@ public class User {
         isActive = active;
     }
 
-    // Check if user is admin
+    // Helper method to check if user is an admin
     public boolean isAdmin() {
         return role == Role.ADMIN;
     }
 
-    // Check if user is customer
+    // Helper method to check if user is a customer
     public boolean isCustomer() {
         return role == Role.CUSTOMER;
     }
-// use for override
+
+    // Override toString() for easier logging/debugging
     @Override
     public String toString() {
         return "User{" +
