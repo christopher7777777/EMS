@@ -1,5 +1,4 @@
-package model; // Package declaration - the class is part of the 'model' package
-
+package model; // Package declaration 
 import java.sql.Timestamp; // Importing Timestamp class to store date and time of the blog post
 
 // This class represents a blog post with properties such as title, description, date, related event, and an image.
