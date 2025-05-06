@@ -7,7 +7,7 @@
         response.sendRedirect(request.getContextPath() + "/login");
         return;
     }
-    
+
     Event event = (Event) request.getAttribute("event");
     if (event == null) {
         response.sendRedirect(request.getContextPath() + "/events");
@@ -25,12 +25,12 @@
 <body>
     <!-- Include Header -->
     <jsp:include page="/includes/header.jsp" />
-    
+
     <main class="main-content">
         <section class="feedback-section">
             <div class="container">
                 <h1 class="section-title">Submit Feedback: <%= event.getEventTitle() %></h1>
-                
+
                 <div class="event-summary">
                     <div class="summary-detail">
                         <span class="label">Date:</span>
@@ -41,17 +41,17 @@
                         <span class="value"><%= event.getEventLocation() %></span>
                     </div>
                 </div>
-                
+
                 <% if (request.getAttribute("error") != null) { %>
                 <div class="alert alert-error">
                     <%= request.getAttribute("error") %>
                 </div>
                 <% } %>
-                
+
                 <div class="form-container">
                     <form action="${pageContext.request.contextPath}/feedback/submit" method="post" class="feedback-form">
                         <input type="hidden" name="eventId" value="<%= event.getEventId() %>">
-                        
+
                         <div class="form-group">
                             <label>Rating</label>
                             <div class="rating-input">
@@ -69,12 +69,12 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="comment">Your Feedback</label>
                             <textarea id="comment" name="comment" rows="5" placeholder="Please share your experience..." required></textarea>
                         </div>
-                        
+
                         <div class="form-buttons">
                             <button type="submit" class="btn btn-primary">Submit Feedback</button>
                             <a href="${pageContext.request.contextPath}/events/detail?id=<%= event.getEventId() %>" class="btn btn-secondary">Cancel</a>
@@ -84,10 +84,10 @@
             </div>
         </section>
     </main>
-    
+
     <!-- Include Footer -->
     <jsp:include page="/includes/footer.jsp" />
-    
+
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

@@ -42,7 +42,7 @@
                     </div>
                     <div class="summary-detail">
                         <span class="label">Price:</span>
-                        <span class="value">$<%= String.format("%.2f", event.getEventPrice()) %></span>
+                        <span class="value">Rs<%= String.format("%.2f", event.getEventPrice()) %></span>
                     </div>
                 </div>
                 

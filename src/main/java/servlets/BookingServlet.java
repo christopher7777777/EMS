@@ -23,24 +23,24 @@ import java.text.SimpleDateFormat;
  */
 @WebServlet("/booking/*")
 public class BookingServlet extends HttpServlet {
-    
+
     private BookingDAO bookingDAO;
     private EventDAO eventDAO;
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
         bookingDAO = new BookingDAO();
         eventDAO = new EventDAO();
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getPathInfo();
         if (action == null) {
             action = "/list";
         }
-        
+
         switch (action) {
             case "/form":
                 showBookingForm(request, response);
@@ -53,14 +53,14 @@ public class BookingServlet extends HttpServlet {
                 break;
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getPathInfo();
         if (action == null) {
             action = "/create";
         }
-        
+
         switch (action) {
             case "/create":
                 createBooking(request, response);
@@ -70,57 +70,57 @@ public class BookingServlet extends HttpServlet {
                 break;
         }
     }
-    
+
     /**
      * Show the booking form for an event
      */
     private void showBookingForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
+
         // Check if user is logged in
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         String eventIdStr = request.getParameter("eventId");
-        
+
         if (eventIdStr == null || eventIdStr.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/events");
             return;
         }
-        
+
         try {
             int eventId = Integer.parseInt(eventIdStr);
             Event event = eventDAO.getEventById(eventId);
-            
+
             if (event == null) {
                 response.sendRedirect(request.getContextPath() + "/events");
                 return;
             }
-            
+
             request.setAttribute("event", event);
             request.getRequestDispatcher("/customer/booking-form.jsp").forward(request, response);
-            
+
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/events");
         }
     }
-    
+
     /**
      * Create a new booking
      */
     private void createBooking(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
+
         // Check if user is logged in
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         User user = (User) session.getAttribute("user");
-        
+
         String eventIdStr = request.getParameter("eventId");
         String name = request.getParameter("name");
         String email = request.getParameter("email");
@@ -128,35 +128,35 @@ public class BookingServlet extends HttpServlet {
         String subject = request.getParameter("subject");
         String meetingTimeStr = request.getParameter("meetingTime");
         String address = request.getParameter("address");
-        
+
         // Validate input
         if (eventIdStr == null || eventIdStr.trim().isEmpty() ||
-            name == null || name.trim().isEmpty() ||
-            email == null || email.trim().isEmpty() ||
-            phone == null || phone.trim().isEmpty() ||
-            subject == null || subject.trim().isEmpty() ||
-            meetingTimeStr == null || meetingTimeStr.trim().isEmpty() ||
-            address == null || address.trim().isEmpty()) {
-            
+                name == null || name.trim().isEmpty() ||
+                email == null || email.trim().isEmpty() ||
+                phone == null || phone.trim().isEmpty() ||
+                subject == null || subject.trim().isEmpty() ||
+                meetingTimeStr == null || meetingTimeStr.trim().isEmpty() ||
+                address == null || address.trim().isEmpty()) {
+
             request.setAttribute("error", "All fields are required.");
             showBookingForm(request, response);
             return;
         }
-        
+
         try {
             int eventId = Integer.parseInt(eventIdStr);
             Event event = eventDAO.getEventById(eventId);
-            
+
             if (event == null) {
                 response.sendRedirect(request.getContextPath() + "/events");
                 return;
             }
-            
+
             // Parse meeting time
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             java.util.Date parsedDate = dateFormat.parse(meetingTimeStr);
             Timestamp meetingTime = new Timestamp(parsedDate.getTime());
-            
+
             // Create booking
             Booking booking = new Booking();
             booking.setBookingEventId(eventId);
@@ -168,18 +168,18 @@ public class BookingServlet extends HttpServlet {
             booking.setBookingAddress(address);
             booking.setBookingDate(new Date(System.currentTimeMillis()));
             booking.setEventId(eventId);
-            
+
             int bookingId = bookingDAO.addBooking(booking);
-            
+
             if (bookingId > 0) {
-                request.setAttribute("success", "Booking created successfully.");
+                request.setAttribute("success", "Booking is successful. Please contact us for further information.");
+                request.setAttribute("event", event); // Pass event details to confirmation page
+                request.getRequestDispatcher("/customer/booking-confirmation.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Failed to create booking.");
+                showBookingForm(request, response);
             }
-            
-            // Redirect to events page
-            response.sendRedirect(request.getContextPath() + "/events");
-            
+
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid event ID.");
             showBookingForm(request, response);
@@ -188,24 +188,24 @@ public class BookingServlet extends HttpServlet {
             showBookingForm(request, response);
         }
     }
-    
+
     /**
      * List all bookings for the current user
      */
     private void listUserBookings(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
+
         // Check if user is logged in
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         User user = (User) session.getAttribute("user");
-        
+
         // In this simple implementation, we assume bookings are tracked by events
         // A more complete implementation would have a user_id field in bookings
-        
+
         // For now, we'll just show all bookings to demonstrate
         request.setAttribute("bookings", bookingDAO.getAllBookings());
         request.getRequestDispatcher("/customer/bookings.jsp").forward(request, response);
