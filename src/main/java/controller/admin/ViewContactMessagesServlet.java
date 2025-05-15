@@ -1,4 +1,4 @@
-package servlets.admin;
+package controller.admin;
 
 import dao.ContactDAO;
 import model.Contact;

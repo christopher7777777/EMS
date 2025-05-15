@@ -9,7 +9,7 @@ public class Blog {
     private String blogDescription; 
     private Timestamp blogPostDate; 
     private int eventId; 
-    private byte[] blogImage; 
+    private byte[] blogImage;
 
     // Default constructor - used when no initial values are provided
     public Blog() {

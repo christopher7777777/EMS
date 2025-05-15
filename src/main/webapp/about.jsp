@@ -8,7 +8,7 @@
     <!-- Sets the character encoding -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Makes the layout responsive on all devices -->
-    
+
     <title>About Us - Event Management System</title>
     <!-- Title of the webpage -->
 
@@ -96,7 +96,7 @@
 
                     <!-- Mission statement -->
                     <h2>Our Mission</h2>
-                    <p>Our mission is to simplify the event management process...</p>
+                    <p>Our mission at the Event Management System is to simplify event planning by providing an intuitive platform that streamlines logistics, ticketing, and attendee management for all types of events. We empower organizers with user-friendly, customizable tools to create memorable experiences effortlessly, regardless of expertise or budget. By enhancing efficiency and accessibility, we aim to make event management inclusive and rewarding for everyone involved.</p>
 
                     <!-- Services offered -->
                     <h2>What We Offer</h2>
@@ -124,7 +124,7 @@
             <!-- Team Introduction Section -->
             <section class="team-section">
                 <h2 class="section-title">Meet Our Team</h2>
-                <p class="section-subtitle">Our dedicated team of experts...</p>
+                <p class="section-subtitle" style="text-align: center; font-weight: bold;"></p>
 
                 <div class="team-grid">
                     <!-- Each team member is displayed in a grid layout -->
@@ -132,25 +132,25 @@
                         <img src="${pageContext.request.contextPath}/images/img.png" alt="Dhoni">
                         <h3>Dhoni</h3>
                         <p>Technical Director</p>
-                        <p>New York, NY</p>
+                        <p>Kathmandu </p>
                     </div>
                     <div class="team-member">
                         <img src="${pageContext.request.contextPath}/images/img_3.png" alt="Watson">
                         <h3>Shane Watson</h3>
                         <p>Operations Director</p>
-                        <p>San Francisco, CA</p>
+                        <p>Damak, Jhapa</p>
                     </div>
                     <div class="team-member">
                         <img src="${pageContext.request.contextPath}/images/img_2.png" alt="Gayle">
                         <h3>Gayle</h3>
                         <p>Creative Director</p>
-                        <p>Chicago, IL</p>
+                        <p>Itahari, Sunsari</p>
                     </div>
                     <div class="team-member">
                         <img src="${pageContext.request.contextPath}/images/img_1.png" alt="Raina">
                         <h3>Raina</h3>
                         <p>Marketing Director</p>
-                        <p>Austin, TX</p>
+                        <p>Inaruwa, Sunsari</p>
                     </div>
                 </div>
             </section>

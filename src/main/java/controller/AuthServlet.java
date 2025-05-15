@@ -1,4 +1,4 @@
-package servlets;
+package controller;
 
 import dao.UserDAO;
 import model.User;
@@ -92,12 +92,18 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("role", user.getRole().toString());
 
-            // Set remember-me cookie if requested
+            // Set or remove "remember me" cookie
+            Cookie usernameCookie = new Cookie("username", "");
+            usernameCookie.setPath(request.getContextPath());
+
             if ("on".equals(rememberMe)) {
-                Cookie usernameCookie = new Cookie("username", username);
+                usernameCookie.setValue(username);
                 usernameCookie.setMaxAge(30 * 24 * 60 * 60); // 30 days
-                response.addCookie(usernameCookie);
+            } else {
+                usernameCookie.setMaxAge(0); // Delete cookie
             }
+
+            response.addCookie(usernameCookie);
 
             // Redirect based on role
             if (user.isAdmin()) {

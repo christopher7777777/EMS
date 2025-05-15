@@ -1,4 +1,4 @@
-package servlets.admin;
+package controller.admin;
 
 import dao.EventDAO;
 import model.Event;

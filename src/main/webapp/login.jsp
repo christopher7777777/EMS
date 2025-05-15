@@ -5,12 +5,12 @@
         return;
     }
 
-    // Check for "remember me" cookie
+// Check for "remember me" cookie
     String savedUsername = "";
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("username")) {
+            if ("username".equals(cookie.getName())) {
                 savedUsername = cookie.getValue();
                 break;
             }
@@ -43,19 +43,23 @@
                 </div>
                 <% } %>
 
-                <form action="${pageContext.request.contextPath}/login" method="post" class="auth-form">
+                <form action="${pageContext.request.contextPath}/login" method="post" autocomplete="on">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" name="username" value="<%= savedUsername %>" required>
+                        <input type="text" id="username" name="username"
+                               value="<%= savedUsername %>"
+                               required autocomplete="username">
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" id="password" name="password"
+                               required autocomplete="current-password">
                     </div>
 
                     <div class="remember-me">
-                        <input type="checkbox" id="rememberMe" name="rememberMe" <%= !savedUsername.isEmpty() ? "checked" : "" %>>
+                        <input type="checkbox" id="rememberMe" name="rememberMe"
+                            <%= !savedUsername.isEmpty() ? "checked" : "" %>>
                         <label for="rememberMe">Remember me</label>
                     </div>
 
@@ -63,6 +67,7 @@
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
                 </form>
+
 
                 <div class="auth-footer">
                     <p>Don't have an account? <a href="${pageContext.request.contextPath}/register">Register</a></p>

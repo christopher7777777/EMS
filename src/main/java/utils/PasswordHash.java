@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 public class PasswordHash {
     
     private static final String HASH_ALGORITHM = "SHA-256";
-    private static final int SALT_LENGTH = 16; // 16 bytes = 128 bits
+    private static final int SALT_LENGTH = 16 ;// 16 bytes = 128 bits
     
 
     public static byte[] generateSalt() {

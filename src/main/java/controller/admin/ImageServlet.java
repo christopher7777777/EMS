@@ -1,4 +1,4 @@
-package servlets;
+package controller;
 
 import dao.BlogDAO;
 import model.Blog;

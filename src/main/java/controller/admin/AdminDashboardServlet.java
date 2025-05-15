@@ -1,4 +1,4 @@
-package servlets.admin;
+package controller.admin;
 
 import dao.*;
 import model.User;

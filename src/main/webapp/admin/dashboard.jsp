@@ -31,6 +31,7 @@
                 <li><a href="${pageContext.request.contextPath}/admin/blogs/list">Manage Blogs</a></li>
                 <li><a href="${pageContext.request.contextPath}/profile/edit">Edit Profile</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+
             </ul>
         </div>
         
@@ -79,6 +80,7 @@
                     <a href="${pageContext.request.contextPath}/admin/events/add" class="btn btn-primary">Add New Event</a>
                     <a href="${pageContext.request.contextPath}/admin/blogs/add" class="btn btn-secondary">Post New Blog</a>
                     <a href="${pageContext.request.contextPath}/admin/contacts" class="btn btn-info">View Messages</a>
+                    <a href="${pageContext.request.contextPath}/admin/bookings/*" class="btn btn-info">View Booking</a>
                 </div>
             </div>
         </div>
