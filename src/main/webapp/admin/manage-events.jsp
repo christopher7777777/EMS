@@ -142,6 +142,7 @@
                     <td>
                         <a href="${pageContext.request.contextPath}/admin/events/edit?id=<%= event.getEventId() %>" class="btn btn-small btn-secondary">Edit</a>
                         <a href="${pageContext.request.contextPath}/admin/events/delete?id=<%= event.getEventId() %>" class="btn btn-small btn-danger" onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
+                        <a href="${pageContext.request.contextPath}/events/detail?id=<%= event.getEventId() %>" class="btn btn-small btn-info" target="_blank">View</a>
                     </td>
                 </tr>
                 <% } %>
