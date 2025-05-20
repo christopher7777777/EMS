@@ -87,6 +87,7 @@ public class AuthServlet extends HttpServlet {
 
             // Create session
             HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(5 * 60);
             session.setAttribute("user", user);
             session.setAttribute("username", user.getUsername());
             session.setAttribute("userId", user.getUserId());
