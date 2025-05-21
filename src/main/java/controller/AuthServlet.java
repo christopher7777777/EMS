@@ -3,7 +3,6 @@ package controller;
 import dao.UserDAO;
 import model.User;
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,9 +10,6 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Servlet handling user authentication (login and registration)
- */
 @WebServlet(name = "AuthServlet", urlPatterns = {"/login", "/register"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024, // 1 MB
@@ -84,8 +80,6 @@ public class AuthServlet extends HttpServlet {
 
         if (user != null) {
             // User authenticated successfully
-
-            // Create session
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5 * 60);
             session.setAttribute("user", user);
@@ -113,7 +107,6 @@ public class AuthServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/");
             }
         } else {
-            // Authentication failed
             request.setAttribute("error", "Invalid username or password.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
@@ -151,6 +144,14 @@ public class AuthServlet extends HttpServlet {
             return;
         }
 
+        // Validate password requirements
+        String passwordRegex = "^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{6,}$";
+        if (!password.matches(passwordRegex)) {
+            request.setAttribute("error", "Password must be at least 6 characters long, contain at least one capital letter, and one symbol (!@#$%^&*).");
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            return;
+        }
+
         // Validate password match
         if (!password.equals(confirmPassword)) {
             request.setAttribute("error", "Passwords do not match.");
@@ -181,7 +182,6 @@ public class AuthServlet extends HttpServlet {
         try {
             user.setRole(User.Role.valueOf(roleStr.toUpperCase()));
         } catch (IllegalArgumentException e) {
-            // Invalid role, default to CUSTOMER
             user.setRole(User.Role.CUSTOMER);
         }
 
@@ -192,11 +192,9 @@ public class AuthServlet extends HttpServlet {
         int userId = userDAO.addUser(user);
 
         if (userId > 0) {
-            // User registered successfully
             request.setAttribute("success", "Registration successful! Please log in.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         } else {
-            // Registration failed
             request.setAttribute("error", "Registration failed. Please try again.");
             request.getRequestDispatcher("/register.jsp").forward(request, response);
         }

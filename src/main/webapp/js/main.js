@@ -15,48 +15,107 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Password confirmation validation
+
+    // Password validation for registration form
     const registerForm = document.querySelector('form[action*="/register"]');
     if (registerForm) {
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+
+        // Real-time password validation feedback
+        passwordInput.addEventListener('input', function() {
+            if (!passwordRegex.test(passwordInput.value)) {
+                passwordInput.classList.add('error');
+                passwordInput.setCustomValidity(
+                    'Password must be at least 6 characters long, contain at least one capital letter, and one symbol (!@#$%^&*).'
+                );
+            } else {
+                passwordInput.classList.remove('error');
+                passwordInput.setCustomValidity('');
+            }
+        });
+
+        // Confirm password validation
+        confirmPasswordInput.addEventListener('input', function() {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordInput.classList.add('error');
+                confirmPasswordInput.setCustomValidity('Passwords do not match.');
+            } else {
+                confirmPasswordInput.classList.remove('error');
+                confirmPasswordInput.setCustomValidity('');
+            }
+        });
+
         registerForm.addEventListener('submit', function(event) {
-            const password = document.getElementById('password');
-            const confirmPassword = document.getElementById('confirmPassword');
-            
-            if (password && confirmPassword && password.value !== confirmPassword.value) {
+            if (!passwordRegex.test(passwordInput.value)) {
+                event.preventDefault();
+                alert('Password must be at least 6 characters long, contain at least one capital letter, and one symbol (!@#$%^&*).');
+                passwordInput.classList.add('error');
+                passwordInput.focus();
+                return;
+            }
+
+            if (passwordInput.value !== confirmPasswordInput.value) {
                 event.preventDefault();
                 alert('Passwords do not match!');
-                
-                // Add error highlighting
-                password.classList.add('error');
-                confirmPassword.classList.add('error');
+                confirmPasswordInput.classList.add('error');
+                confirmPasswordInput.focus();
+                return;
             }
         });
     }
-    
-    // Change password form validation
+
+    // Change password form validation (if applicable)
     const changePasswordForm = document.querySelector('form[action*="/changePassword"]');
     if (changePasswordForm) {
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+
+        newPassword.addEventListener('input', function() {
+            if (!passwordRegex.test(newPassword.value)) {
+                newPassword.classList.add('error');
+                newPassword.setCustomValidity(
+                    'Password must be at least 6 characters long, contain at least one capital letter, and one symbol (!@#$%^&*).'
+                );
+            } else {
+                newPassword.classList.remove('error');
+                newPassword.setCustomValidity('');
+            }
+        });
+
+        confirmPassword.addEventListener('input', function() {
+            if (newPassword.value !== confirmPassword.value) {
+                confirmPassword.classList.add('error');
+                confirmPassword.setCustomValidity('Passwords do not match.');
+            } else {
+                confirmPassword.classList.remove('error');
+                confirmPassword.setCustomValidity('');
+            }
+        });
+
         changePasswordForm.addEventListener('submit', function(event) {
-            const newPassword = document.getElementById('newPassword');
-            const confirmPassword = document.getElementById('confirmPassword');
-            
-            if (newPassword && confirmPassword && newPassword.value !== confirmPassword.value) {
+            if (!passwordRegex.test(newPassword.value)) {
+                event.preventDefault();
+                alert('Password must be at least 6 characters long, contain at least one capital letter, and one symbol (!@#$%^&*).');
+                newPassword.classList.add('error');
+                newPassword.focus();
+                return;
+            }
+
+            if (newPassword.value !== confirmPassword.value) {
                 event.preventDefault();
                 alert('New passwords do not match!');
-                
-                // Add error highlighting
-                newPassword.classList.add('error');
                 confirmPassword.classList.add('error');
+                confirmPassword.focus();
+                return;
             }
         });
     }
-    
+
     // Admin dashboard charts (if Chart.js is available)
     if (typeof Chart !== 'undefined' && document.getElementById('eventsChart')) {
-        // This is a placeholder for the Chart.js implementation
-        // In a real application, this would fetch data from the server
-        
         const eventsCtx = document.getElementById('eventsChart').getContext('2d');
         const eventsChart = new Chart(eventsCtx, {
             type: 'bar',
@@ -79,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Confirm delete actions
     const deleteButtons = document.querySelectorAll('.btn-danger');
     deleteButtons.forEach(button => {
@@ -91,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
+
     // Form validation for booking forms
     const bookingForm = document.querySelector('.booking-form');
     if (bookingForm) {
@@ -102,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Please enter a valid phone number');
                 phone.focus();
             }
-            
+
             const meetingTime = document.getElementById('meetingTime');
             if (meetingTime && meetingTime.value.trim() === '') {
                 event.preventDefault();
@@ -111,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Auto-hide alerts after 5 seconds
     const alerts = document.querySelectorAll('.alert');
     if (alerts.length > 0) {

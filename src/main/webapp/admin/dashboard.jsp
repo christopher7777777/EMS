@@ -77,7 +77,7 @@
             <div class="dashboard-actions">
                 <h2>Quick Actions</h2>
                 <div class="action-buttons">
-                    <a href="${pageContext.request.contextPath}/admin/events/add" class="btn btn-primary">Add New Event</a>
+                    <a href="${pageContext.request.contextPath}/admin/events/list" class="btn btn-primary">Add New Event</a>
                     <a href="${pageContext.request.contextPath}/admin/blogs/add" class="btn btn-secondary">Post New Blog</a>
                     <a href="${pageContext.request.contextPath}/admin/contacts" class="btn btn-info">View Messages</a>
                     <a href="${pageContext.request.contextPath}/admin/bookings/*" class="btn btn-info">View Booking</a>
