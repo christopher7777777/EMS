@@ -40,6 +40,7 @@
                         <li><a href="${pageContext.request.contextPath}/admin/dashboard" class="user-menu-link">Admin Dashboard</a></li>
                         <% } %>
                         <li><a href="${pageContext.request.contextPath}/profile/edit" class="user-menu-link">My Profile</a></li>
+                        <li><a href="${pageContext.request.contextPath}/booking/list" class="user-menu-link">My Booking</a></li>
                         <li><a href="${pageContext.request.contextPath}/logout" class="user-menu-link">Logout</a></li>
                     </ul>
                 </li>
