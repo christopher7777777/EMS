@@ -91,7 +91,7 @@
 <div class="container">
     <h2>Access Denied</h2>
     <p><%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "You do not have permission to access this resource." %></p>
-    <a href="${pageContext.request.contextPath}/Home">Return to Home</a>
+    <a href="${pageContext.request.contextPath}/index>Return to Home</a>
 
     <% session.removeAttribute("errorMessage"); // Clear message after displaying %>
 </div>
